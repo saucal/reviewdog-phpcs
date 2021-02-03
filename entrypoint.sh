@@ -6,7 +6,7 @@ cd "${GITHUB_WORKSPACE}" || exit 1
 
 export REVIEWDOG_GITHUB_API_TOKEN="$INPUT_GITHUB_TOKEN"
 PHPCS_JSON=$(mktemp)
-phpcs --report-json="${PHPCS_JSON}" "${GITHUB_WORKSPACE}" || PHPCS_EXIT_CODE=$?
+phpcs --extensions="php" --report-json="${PHPCS_JSON}" "${GITHUB_WORKSPACE}" || PHPCS_EXIT_CODE=$?
 
 FIXABLE_ERRORS=$(cat "${PHPCS_JSON}" | php -f '/count-fixable.php');
 echo "::set-output name=fixables::${FIXABLE_ERRORS}"
