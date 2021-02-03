@@ -22,5 +22,5 @@ if [ "${FIXABLE_ERRORS}" -eq "0" ]; then
             -fail-on-error="${INPUT_FAIL_ON_ERROR:-true}" \
             -level="${INPUT_LEVEL:-warning}" || REVIEWDOG_EXIT_CODE=$?
 
-    exit "${REVIEWDOG_EXIT_CODE}"
+    exit "${REVIEWDOG_EXIT_CODE:-0}"
 fi
