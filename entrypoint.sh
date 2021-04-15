@@ -5,6 +5,12 @@ composer --version
 
 cd "${GITHUB_WORKSPACE}" || exit 1
 
+# unshallow clone
+git remote set-branches origin '*'
+git fetch --depth 1 --quiet
+
+git diff "origin/${GITHUB_BASE_REF}" "origin/${GITHUB_HEAD_REF}" > /worker/curr-diff.diff
+
 export REVIEWDOG_GITHUB_API_TOKEN="$INPUT_GITHUB_TOKEN"
 PHPCS_JSON=$(mktemp)
 phpcs --extensions="php" --report-json="${PHPCS_JSON}" "${GITHUB_WORKSPACE}" || PHPCS_EXIT_CODE=$?
