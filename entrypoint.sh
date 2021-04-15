@@ -1,6 +1,7 @@
 #!/bin/bash
 phpcs --version
 reviewdog --version
+composer --version
 
 cd "${GITHUB_WORKSPACE}" || exit 1
 

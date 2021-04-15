@@ -15,6 +15,8 @@ RUN curl https://raw.githubusercontent.com/saucal/wp-codesniffer-installer/maste
 
 RUN curl -sfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b /usr/local/bin/
 
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
+
 COPY entrypoint.sh /worker/entrypoint.sh
 COPY rdjson-conv.php /worker/rdjson-conv.php
 COPY count-fixable.php /worker/count-fixable.php
