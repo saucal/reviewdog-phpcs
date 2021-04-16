@@ -6,6 +6,8 @@ reviewdog --version
 echo "Composer:"
 composer --version
 
+INPUT_LINTER="${INPUT_LINTER:-php}"
+
 cd "${GITHUB_WORKSPACE}" || exit 1
 
 # unshallow clone
@@ -15,15 +17,20 @@ git fetch --depth 1 --quiet
 git diff "origin/${GITHUB_BASE_REF}" "origin/${GITHUB_HEAD_REF}" > /worker/curr-diff.diff
 
 export REVIEWDOG_GITHUB_API_TOKEN="$INPUT_GITHUB_TOKEN"
-PHPCS_JSON=$(mktemp)
-phpcs --extensions="php" --report-json="${PHPCS_JSON}" "${GITHUB_WORKSPACE}" || PHPCS_EXIT_CODE=$?
+export LINT_JSON
+export LINT_RDJSONL
+export LINT_EXIT_CODE
+LINT_JSON=$(mktemp)
+LINT_RDJSONL=$(mktemp)
+. "/worker/linter/${INPUT_LINTER}/lint.sh"
 
-FIXABLE_ERRORS=$(cat "${PHPCS_JSON}" | php -f '/worker/count-fixable-php.php');
+FIXABLE_ERRORS=$(cat "${LINT_JSON}" | php -f "/worker/linter/${INPUT_LINTER}/count-fixable.php");
 echo "::set-output name=fixables::${FIXABLE_ERRORS}"
 
+( cat "$LINT_JSON" | php -f "/worker/linter/${INPUT_LINTER}/rdjson-conv.php" ) > "${LINT_RDJSONL}"
+
 if [ "${FIXABLE_ERRORS}" -eq "0" ]; then
-    cat "$PHPCS_JSON" \
-        | php -f "/worker/rdjson-conv.php" \
+    cat "$LINT_RDJSONL" \
         | reviewdog \
             -name="${INPUT_TOOL_NAME:-PHPCS}" \
             -f="rdjsonl" \

@@ -2,6 +2,9 @@ name: 'Run PHPCS with reviewdog'
 description: '🐶 Run phpcs with reviewdog on pull requests to improve code review experience.'
 author: 'SAU/CAL'
 inputs:
+  linter:
+    description: 'Linter to use from the docker image.'
+    default: php
   github_token:
     description: 'GITHUB_TOKEN'
     default: ${{ github.token }}

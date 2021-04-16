@@ -22,6 +22,6 @@ RUN mkdir /worker
 RUN cd /worker && composer require ptlis/diff-parser
 
 COPY entrypoint.sh /entrypoint.sh
-COPY worker/* /worker
+COPY worker /worker
 
 ENTRYPOINT ["bash", "/entrypoint.sh"]
