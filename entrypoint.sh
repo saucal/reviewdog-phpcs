@@ -1,4 +1,6 @@
 #!/bin/bash
+echo "PHP:"
+php --version
 echo "PHPCS:"
 phpcs --version
 echo "Reviewdog:"
