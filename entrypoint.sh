@@ -1,6 +1,9 @@
 #!/bin/bash
+echo "PHPCS:"
 phpcs --version
+echo "Reviewdog:"
 reviewdog --version
+echo "Composer:"
 composer --version
 
 cd "${GITHUB_WORKSPACE}" || exit 1
