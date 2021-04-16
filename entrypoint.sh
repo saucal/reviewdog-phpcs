@@ -8,7 +8,8 @@ reviewdog --version
 echo "Composer:"
 composer --version
 
-INPUT_LINTER="${INPUT_LINTER:-php}"
+INPUT_LINTERS="${INPUT_LINTERS:-php}"
+IFS=',' read -r -a INPUT_LINTERS <<< "${INPUT_LINTERS}"
 
 cd "${GITHUB_WORKSPACE}" || exit 1
 
@@ -22,17 +23,24 @@ export REVIEWDOG_GITHUB_API_TOKEN="$INPUT_GITHUB_TOKEN"
 export LINT_JSON
 export LINT_RDJSONL
 export LINT_EXIT_CODE
-LINT_JSON=$(mktemp)
-LINT_RDJSONL=$(mktemp)
-. "/worker/linter/${INPUT_LINTER}/lint.sh"
+FIXABLE_ERRORS=0
+FULL_RDJSONL=$(mktemp)
 
-FIXABLE_ERRORS=$(cat "${LINT_JSON}" | php -f "/worker/linter/${INPUT_LINTER}/count-fixable.php");
+for INPUT_LINTER in "${INPUT_LINTERS[@]}"; do
+    echo "* Running linter: ${INPUT_LINTER}"
+    LINT_JSON=$(mktemp)
+    LINT_RDJSONL=$(mktemp)
+    . "/worker/linter/${INPUT_LINTER}/lint.sh"
+
+    LINT_FIXABLE_ERRORS=$(cat "${LINT_JSON}" | php -f "/worker/linter/${INPUT_LINTER}/count-fixable.php");
+    FIXABLE_ERRORS=$((FIXABLE_ERRORS + LINT_FIXABLE_ERRORS))
+    ( cat "$LINT_JSON" | php -f "/worker/linter/${INPUT_LINTER}/rdjson-conv.php" ) > "${LINT_RDJSONL}"
+    cat "${LINT_RDJSONL}" >> "${FULL_RDJSONL}"
+done
 echo "::set-output name=fixables::${FIXABLE_ERRORS}"
 
-( cat "$LINT_JSON" | php -f "/worker/linter/${INPUT_LINTER}/rdjson-conv.php" ) > "${LINT_RDJSONL}"
-
 if [ "${FIXABLE_ERRORS}" -eq "0" ]; then
-    cat "$LINT_RDJSONL" \
+    cat "$FULL_RDJSONL" \
         | reviewdog \
             -name="${INPUT_TOOL_NAME:-PHPCS}" \
             -f="rdjsonl" \
