@@ -15,7 +15,7 @@ export REVIEWDOG_GITHUB_API_TOKEN="$INPUT_GITHUB_TOKEN"
 PHPCS_JSON=$(mktemp)
 phpcs --extensions="php" --report-json="${PHPCS_JSON}" "${GITHUB_WORKSPACE}" || PHPCS_EXIT_CODE=$?
 
-FIXABLE_ERRORS=$(cat "${PHPCS_JSON}" | php -f '/worker/count-fixable.php');
+FIXABLE_ERRORS=$(cat "${PHPCS_JSON}" | php -f '/worker/count-fixable-php.php');
 echo "::set-output name=fixables::${FIXABLE_ERRORS}"
 
 if [ "${FIXABLE_ERRORS}" -eq "0" ]; then

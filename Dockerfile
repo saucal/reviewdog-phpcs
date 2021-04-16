@@ -21,6 +21,6 @@ RUN mkdir /worker && cd /worker && composer require ptlis/diff-parser
 
 COPY entrypoint.sh /worker/entrypoint.sh
 COPY rdjson-conv.php /worker/rdjson-conv.php
-COPY count-fixable.php /worker/count-fixable.php
+COPY count-fixable-php.php /worker/count-fixable-php.php
 
 ENTRYPOINT ["bash", "/worker/entrypoint.sh"]
