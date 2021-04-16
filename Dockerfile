@@ -17,7 +17,9 @@ RUN curl -sfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/insta
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
-RUN mkdir /worker && cd /worker && composer require ptlis/diff-parser
+RUN mkdir /worker
+
+RUN cd /worker && composer require ptlis/diff-parser
 
 COPY entrypoint.sh /worker/entrypoint.sh
 COPY rdjson-conv.php /worker/rdjson-conv.php
