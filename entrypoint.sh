@@ -29,6 +29,9 @@ FIXABLE_ERRORS=0
 FULL_RDJSONL=$(mktemp)
 
 for INPUT_LINTER in "${INPUT_LINTERS[@]}"; do
+    if [ ! -d "/worker/linter/${INPUT_LINTER}" ]; then
+        continue;
+    fi
     echo "* Running linter: ${INPUT_LINTER}"
     LINT_JSON=$(mktemp)
     LINT_RDJSONL=$(mktemp)
