@@ -1,0 +1,10 @@
+{
+  "name": "wordpress-linters",
+  "version": "1.0.0",
+  "description": "WP linters to be used by SAU/CAL",
+  "author": "SAU/CAL <info@saucal.com>",
+  "license": "GPL-3.0",
+  "repository": {
+    "url": "https://github.com/saucal/reviewdog-phpcs-action"
+  }
+}

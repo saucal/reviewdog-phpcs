@@ -9,6 +9,8 @@ RUN apk --no-cache add \
         curl \
         git \
         patch \
+        nodejs \
+        npm \
   && docker-php-ext-install zip
 
 RUN curl https://raw.githubusercontent.com/saucal/wp-codesniffer-installer/master/install-standards.sh | sh
@@ -17,11 +19,17 @@ RUN curl -sfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/insta
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
-RUN mkdir /worker
+RUN mkdir -p /worker
 
 RUN cd /worker && composer require ptlis/diff-parser
 
+COPY worker/linter/npm-install/package.json /worker/linter/npm-install/package.json
+RUN cd /worker/linter/npm-install && npm install --save --package-lock-only --no-progress @wordpress/scripts
+RUN cp -f /worker/linter/npm-install/package.json /tmp/worker-package.json
+
 COPY entrypoint.sh /entrypoint.sh
 COPY worker /worker
+
+RUN cp -f /tmp/worker-package.json /worker/linter/npm-install/package.json 
 
 ENTRYPOINT ["bash", "/entrypoint.sh"]

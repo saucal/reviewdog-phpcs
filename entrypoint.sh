@@ -7,6 +7,8 @@ echo "Reviewdog:"
 reviewdog --version
 echo "Composer:"
 composer --version
+echo "NodeJS:"
+node -v
 
 INPUT_LINTERS="${INPUT_LINTERS:-php}"
 IFS=',' read -r -a INPUT_LINTERS <<< "${INPUT_LINTERS}"
