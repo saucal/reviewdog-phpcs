@@ -47,7 +47,7 @@ echo "::set-output name=fixables::${FIXABLE_ERRORS}"
 if [ "${FIXABLE_ERRORS}" -eq "0" ]; then
     cat "$FULL_RDJSONL" \
         | reviewdog \
-            -name="${INPUT_TOOL_NAME:-PHPCS}" \
+            -name="${INPUT_TOOL_NAME:-Code Review}" \
             -f="rdjsonl" \
             -reporter="${INPUT_REPORTER:-github-pr-review}" \
             -filter-mode="${INPUT_FILTER_MODE:-added}" \
