@@ -1,5 +1,5 @@
 #!/bin/bash
-JSFILES=$(find . | grep -Ec '\.(js|jsx|ts|tsx)$')
+JSFILES=$(find . -type d -name "node_modules" -prune -o -type f -print | grep -Ec '\.(js|jsx|ts|tsx)$')
 
 if [ "$JSFILES" -eq 0 ]; then
 	echo "nothing to lint here";
