@@ -24,7 +24,7 @@ RUN mkdir -p /worker
 RUN cd /worker && composer require ptlis/diff-parser
 
 COPY worker/linter/npm-install/package.json /worker/linter/npm-install/package.json
-RUN cd /worker/linter/npm-install && npm install --save --package-lock-only --no-progress @wordpress/scripts
+RUN cd /worker/linter/npm-install && npm install --save --package-lock-only --no-progress @wordpress/scripts && npm cache clean --force
 RUN cp -f /worker/linter/npm-install/package.json /tmp/worker-package.json
 
 COPY entrypoint.sh /entrypoint.sh
