@@ -1,5 +1,11 @@
 <?php
+$out = array( 'diagnostics' => array() );
 $json = json_decode( file_get_contents( 'php://stdin' ), true );
+
+if( empty( $json ) ) {
+	echo json_encode( $out, JSON_UNESCAPED_SLASHES ) . "\n";
+	exit;
+}
 
 foreach ( $json as $i => $file ) {
 	$path = $file['source'];
@@ -21,8 +27,7 @@ foreach ( $json as $i => $file ) {
 			),
 			'severity' => $severity,
 		);
-		echo json_encode( $row, JSON_UNESCAPED_SLASHES ) . "\n";
+		$out['diagnostics'][] = $row;
 	}
 }
-
-//var_dump( json_encode( $json, JSON_PRETTY_PRINT ) );
+echo json_encode( $out, JSON_UNESCAPED_SLASHES ) . "\n";
