@@ -36,8 +36,6 @@ done
 
 FIXABLE_ERRORS=$(cat "${FIXABLE_ERRORS}")
 
-echo "::set-output name=fixables::${FIXABLE_ERRORS}"
-
 if [ "${FIXABLE_ERRORS}" -gt "0" ]; then
     COMMENT_ID=$(curl -s --request POST \
         --url "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${INPUT_PR_NUMBER}/comments" \
