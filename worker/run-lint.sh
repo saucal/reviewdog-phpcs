@@ -16,6 +16,9 @@ LINT_JSON=$(mktemp)
 . "/worker/linter/${INPUT_LINTER}/lint.sh"
 
 LINT_FIXABLE_ERRORS=$(cat "${LINT_JSON}" | php -f "/worker/linter/${INPUT_LINTER}/count-fixable.php");
+if [ "${LINT_FIXABLE_ERRORS}" -gt "0" ]; then
+	echo "${LINT_FIXABLE_ERRORS}" > "/worker/fixables/${INPUT_LINTER}"
+fi
 FIXABLE_ERRORS_NEW=$((FIXABLE_ERRORS_PREV + LINT_FIXABLE_ERRORS))
 echo -n "${FIXABLE_ERRORS_NEW}" > "${FIXABLE_ERRORS}"
 ( cat "$LINT_JSON" | php -f "/worker/linter/${INPUT_LINTER}/rdjson-conv.php" ) > "${LINT_RDJSON}"

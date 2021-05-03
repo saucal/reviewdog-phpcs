@@ -29,6 +29,7 @@ FIXABLE_ERRORS=$(mktemp)
 echo -n "0" > "${FIXABLE_ERRORS}"
 
 mkdir -p /worker/executions
+mkdir -p /worker/fixables
 
 for INPUT_LINTER in "${INPUT_LINTERS[@]}"; do
     /worker/run-lint.sh "${INPUT_LINTER}"
