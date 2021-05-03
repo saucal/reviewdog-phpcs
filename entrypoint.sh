@@ -48,6 +48,7 @@ if [ "${FIXABLE_ERRORS}" -gt "0" ]; then
     
     REACTION_ID=$(curl -s --request POST \
         --url "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/comments/${COMMENT_ID}/reactions" \
+        --header "Accept: application/vnd.github.squirrel-girl-preview+json" \
         --header "Authorization: Bearer ${INPUT_GITHUB_TOKEN}" \
         --header "Content-Type: application/json" \
         --data '{"body":"rocket"}' | jq -r '.id')
