@@ -1,0 +1,10 @@
+runner:
+  php:
+    cmd: /worker/run-lint.sh php
+    format: rdjson
+  js:
+    cmd: /worker/run-lint.sh js
+    format: rdjson
+  css:
+    cmd: /worker/run-lint.sh css
+    format: rdjson
