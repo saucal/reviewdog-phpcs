@@ -38,7 +38,13 @@ FIXABLE_ERRORS=$(cat "${FIXABLE_ERRORS}")
 
 echo "::set-output name=fixables::${FIXABLE_ERRORS}"
 
-if [ "${FIXABLE_ERRORS}" -eq "0" ]; then
+if [ "${FIXABLE_ERRORS}" -gt "0" ]; then
+    curl --request POST \
+        --url "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${INPUT_PR_NUMBER}/comments" \
+        --header "Authorization: Bearer ${INPUT_GITHUB_TOKEN}" \
+        --header "Content-Type: application/json" \
+        --data '{"body":"body"}'
+else
     reviewdog \
         -runners="${INPUT_LINTERS_PARAM}" \
         -conf="/worker/.reviewdog.yml" \

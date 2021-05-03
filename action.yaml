@@ -27,6 +27,9 @@ inputs:
   level:
     description: 'Report level for reviewdog [info, warning, error]'
     default: 'warning'
+  pr_number:
+    description: 'PR_NUMBER'
+    default: ${{ github.event.number }}
 runs:
   using: 'docker'
   image: 'docker://saucalinc/reviewdog-php:latest'
