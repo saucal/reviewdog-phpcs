@@ -37,17 +37,23 @@ done
 FIXABLE_ERRORS=$(cat "${FIXABLE_ERRORS}")
 
 if [ "${FIXABLE_ERRORS}" -gt "0" ]; then
+    echo "fixables=${FIXABLE_ERRORS}"
     COMMENT_ID=$(curl -s --request POST \
         --url "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${INPUT_PR_NUMBER}/comments" \
         --header "Authorization: Bearer ${INPUT_GITHUB_TOKEN}" \
         --header "Content-Type: application/json" \
-        --data '{"body":"bodydd"}' | jq '.id')
+        --data '{"body":"bodydd"}' | jq -r '.id')
+
+    echo "comment_created=${COMMENT_ID}"
     
     REACTION_ID=$(curl -s --request POST \
         --url "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/comments/${COMMENT_ID}/reactions" \
         --header "Authorization: Bearer ${INPUT_GITHUB_TOKEN}" \
         --header "Content-Type: application/json" \
-        --data '{"body":"rocket"}')
+        --data '{"body":"rocket"}' | jq -r '.id')
+
+    echo "reaction_created=${REACTION_ID}"
+
     exit 1
 else
     reviewdog \
