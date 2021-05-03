@@ -39,11 +39,18 @@ FIXABLE_ERRORS=$(cat "${FIXABLE_ERRORS}")
 echo "::set-output name=fixables::${FIXABLE_ERRORS}"
 
 if [ "${FIXABLE_ERRORS}" -gt "0" ]; then
-    curl --request POST \
+    COMMENT_ID=$(curl -s --request POST \
         --url "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${INPUT_PR_NUMBER}/comments" \
         --header "Authorization: Bearer ${INPUT_GITHUB_TOKEN}" \
         --header "Content-Type: application/json" \
-        --data '{"body":"body"}'
+        --data '{"body":"bodydd"}' | jq '.id')
+    
+    REACTION_ID=$(curl -s --request POST \
+        --url "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/comments/${COMMENT_ID}/reactions" \
+        --header "Authorization: Bearer ${INPUT_GITHUB_TOKEN}" \
+        --header "Content-Type: application/json" \
+        --data '{"body":"rocket"}')
+    exit 1
 else
     reviewdog \
         -runners="${INPUT_LINTERS_PARAM}" \
