@@ -43,7 +43,7 @@ if [ "${FIXABLE_ERRORS}" -gt "0" ]; then
         --url "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${INPUT_PR_NUMBER}/comments" \
         --header "Authorization: Bearer ${INPUT_GITHUB_TOKEN}" \
         --header "Content-Type: application/json" \
-        --data '{"body":"bodydd"}' | jq -r '.id')
+        --data '{"body":"Please run fixers on your code, as there'\''s still code that can be autofixed in this PR."}' | jq -r '.id')
 
     echo "comment_created=${COMMENT_ID}"
     
@@ -52,7 +52,7 @@ if [ "${FIXABLE_ERRORS}" -gt "0" ]; then
         --header "Accept: application/vnd.github.squirrel-girl-preview+json" \
         --header "Authorization: Bearer ${INPUT_GITHUB_TOKEN}" \
         --header "Content-Type: application/json" \
-        --data '{"body":"rocket"}' | jq -r '.id')
+        --data '{"content":"rocket"}' | jq -r '.id')
 
     echo "reaction_created=${REACTION_ID}"
 
