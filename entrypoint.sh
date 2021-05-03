@@ -40,7 +40,7 @@ echo "::set-output name=fixables::${FIXABLE_ERRORS}"
 
 if [ "${FIXABLE_ERRORS}" -gt "0" ]; then
     curl --request POST \
-        --url "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${INPUT_PR_NUMBER}/comments" \
+        --url "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${INPUT_PR_NUMBER}/comments" \
         --header "Authorization: Bearer ${INPUT_GITHUB_TOKEN}" \
         --header "Content-Type: application/json" \
         --data '{"body":"body"}'
