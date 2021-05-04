@@ -1,4 +1,4 @@
-FROM php:alpine
+FROM php:7-alpine
 
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
