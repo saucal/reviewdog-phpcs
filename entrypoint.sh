@@ -23,7 +23,6 @@ git fetch --depth 1 --quiet
 git diff "origin/${GITHUB_BASE_REF}" "origin/${GITHUB_HEAD_REF}" > /worker/curr-diff.diff
 
 export REVIEWDOG_GITHUB_API_TOKEN="$INPUT_GITHUB_TOKEN"
-export LINT_EXIT_CODE
 export FIXABLE_ERRORS
 FIXABLE_ERRORS=$(mktemp)
 echo -n "0" > "${FIXABLE_ERRORS}"
@@ -33,6 +32,10 @@ mkdir -p /worker/fixables
 
 for INPUT_LINTER in "${INPUT_LINTERS[@]}"; do
     /worker/run-lint.sh "${INPUT_LINTER}"
+    LINT_EXIT_CODE=$?
+    if [ "${LINT_EXIT_CODE}" -ne "0" ]; then
+        exit "${LINT_EXIT_CODE}"
+    fi
 done
 
 FIXABLE_ERRORS=$(cat "${FIXABLE_ERRORS}")

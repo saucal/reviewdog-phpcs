@@ -13,7 +13,12 @@ FIXABLE_ERRORS_PREV=$(cat "${FIXABLE_ERRORS}")
 
 echo "* Running linter: ${INPUT_LINTER}"
 LINT_JSON=$(mktemp)
+LINT_EXIT_CODE=0
 . "/worker/linter/${INPUT_LINTER}/lint.sh"
+if [ "${LINT_EXIT_CODE}" -ne "0" ]; then
+	echo "${INPUT_LINTER} failed somehow. See output above."
+	exit "${LINT_EXIT_CODE}"
+fi
 
 LINT_FIXABLE_ERRORS=$(cat "${LINT_JSON}" | php -f "/worker/linter/${INPUT_LINTER}/count-fixable.php");
 if [ "${LINT_FIXABLE_ERRORS}" -gt "0" ]; then
