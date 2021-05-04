@@ -18,5 +18,9 @@ STYLELINT_ALL_JSON=$(mktemp)
 ./node_modules/.bin/wp-scripts lint-style --formatter=json --fix > "${STYLELINT_UNFIXABLE_JSON}"
 git reset --hard HEAD --quiet
 ./node_modules/.bin/wp-scripts lint-style --formatter=json > "${STYLELINT_ALL_JSON}"
+LINT_EXIT_CODE=$?
+if [ "${LINT_EXIT_CODE}" -eq "2" ]; then
+	LINT_EXIT_CODE=0
+fi
 
 php -f "/worker/linter/${INPUT_LINTER}/stylelint-fixables.php" > "${LINT_JSON}"
