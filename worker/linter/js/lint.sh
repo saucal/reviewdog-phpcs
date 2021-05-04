@@ -11,4 +11,4 @@ if [ ! -d ./node_modules ]; then
 	. /worker/linter/npm-install/run.sh
 fi
 
-./node_modules/.bin/wp-scripts lint-js -f json . > "${LINT_JSON}"
+./node_modules/.bin/wp-scripts lint-js --max-warnings 0 -f json . > "${LINT_JSON}"
