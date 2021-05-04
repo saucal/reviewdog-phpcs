@@ -31,6 +31,8 @@ RUN cp -f /worker/linter/npm-install/package.json /tmp/worker-package.json
 COPY entrypoint.sh /entrypoint.sh
 COPY worker /worker
 
-RUN cp -f /tmp/worker-package.json /worker/linter/npm-install/package.json 
+RUN cp -f /tmp/worker-package.json /worker/linter/npm-install/package.json
+
+RUN echo 'memory_limit = -1' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini
 
 ENTRYPOINT ["bash", "/entrypoint.sh"]
